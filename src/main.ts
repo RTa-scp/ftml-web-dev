@@ -1,25 +1,12 @@
 import css from './css/wikidot.css';
 import sigma from './css/sigma-9.css';
 import init from './css/init.css';
-import fs from 'vite-plugin-fs/browser';
 import YAML from 'yaml'
 import ftmlWorker from './ftml.web.worker.js?bundled-worker&dataurl';
 
 let ftml = new Worker(ftmlWorker, {
   type: 'module',
 });
-
-type Message = {
-  actionarea: {
-    title: string
-    titleinput: string
-    message: Array<string>
-    save: string
-    advancedsettings: string
-    advancedsettingstitle: string
-  }
-}
-
 
 document.querySelector("head > style#innercss")!.innerHTML = css;
 document.querySelector("head > style#sigma")!.innerHTML = sigma;
@@ -46,10 +33,45 @@ ftml.onmessage = (event: MessageEvent) => {
   }
 };
 
+async function loadlocales(lang: string = 'en') {
+  const sideftml = await fetch(`./locales/${lang}/side.ftml`).then(v => v.text());
+  const topftml = await fetch(`./locales/${lang}/top.ftml`).then(v => v.text());
+  const messages = YAML.parse(await fetch(`./locales/${lang}/messages.yaml`).then(v => v.text()));
+  for (const key in messages.actionarea) {
+    let messagevalue = messages.actionarea[key];
+    if (Array.isArray(messagevalue)) {
+      const message = messagevalue.map((v: string) => `<li>${v}</li>`).join("");
+      document.querySelector(`#actionarea-${key}`)!.innerHTML = message;
+    }
+    else if (key == "save") {
+      document.querySelector(`#actionarea-${key}`)!.value = messagevalue;
+    }
+    else {
+      document.querySelector(`#actionarea-${key}`)!.innerHTML = messagevalue;
+    }
+  }
+  readlang(lang);
+  ftml.postMessage({ value: sideftml, type: "side" });
+  ftml.postMessage({ value: topftml, type: "top" });
+}
+async function readlang(lang: string) {
+  document.getElementById("lang-select")!.innerHTML = "";
+  const langconfig = YAML.parse(await fetch('./locales/index.yaml').then(v => v.text()));
+  for (const key in langconfig[lang]) {
+    let op = document.createElement("option");
+    op.value = key;
+    op.label = langconfig[lang][key];
+    if (key == lang)
+      op.selected = true;
+    document.getElementById("lang-select")!.appendChild(op);
+  }
+}
+
 const editpageField: HTMLInputElement = <HTMLInputElement>document.getElementById('edit-page-textarea')!;
 const edittitleField: HTMLInputElement = <HTMLInputElement>document.getElementById('edit-page-title')!;
 const editsideField: HTMLInputElement = <HTMLInputElement>document.getElementById('edit-side-textarea')!;
-const editsaveButton = document.getElementById('actionarea-save')!;
+const editsaveButton: HTMLInputElement = <HTMLInputElement>document.getElementById('actionarea-save')!;
+const langSelect: HTMLInputElement = <HTMLInputElement>document.getElementById('lang-select')!;
 
 editpageField.addEventListener('input', (event) => {
   const { target } = event;
@@ -85,6 +107,13 @@ edittitleField.addEventListener('input', (event) => {
   const FtmlStorageItem = { title: edittitleField.value, page: editpageField.value, side: editsideField.value };
   localStorage.setItem("FtmlStorage", JSON.stringify(FtmlStorageItem));
 });
+langSelect.addEventListener('change', function () {
+  const lang = this.value;
+  loadlocales(lang);
+  const WPconfigItem = { lang: lang };
+  localStorage.setItem("WPconfig", JSON.stringify(WPconfigItem));
+
+});
 
 editsaveButton.addEventListener('click', async () => {
   const opts = {
@@ -106,30 +135,13 @@ editsaveButton.addEventListener('click', async () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  async function loadFtml() {
-    const dir = await fs.readdir('./locales/');
-    console.log(dir);
-    const sideftml = await fs.readFile('./locales/ja/side.ftml');
-    const topftml = await fs.readFile('./locales/ja/top.ftml');
-    const messagescongig = await fs.readFile('./locales/ja/messages.yaml');
-    const messages = YAML.parse(messagescongig);
-    for (const key in messages.actionarea) {
-      let messagevalue = messages.actionarea[key];
-      if (Array.isArray(messagevalue)) {
-        // array to <ul> <li> message
-        const message = messagevalue.map((v: string) => `<li>${v}</li>`).join("");
-        document.querySelector(`#actionarea-${key}`)!.innerHTML = message;
-      }
-      else {
-        document.querySelector(`#actionarea-${key}`)!.innerHTML = messagevalue;
-      }
-    }
-    
-    ftml.postMessage({ value: sideftml, type: "side" });
-    ftml.postMessage({ value: topftml, type: "top" });
+  const WPconfigItem = localStorage.getItem("WPconfig");
+  if (WPconfigItem) {
+    const WPconfig = JSON.parse(WPconfigItem);
+    loadlocales(WPconfig.lang);
+  } else {
+    loadlocales();
   }
-  loadFtml();
-
   const FtmlStorageItem = localStorage.getItem("FtmlStorage");
   if (FtmlStorageItem) {
     const FtmlStorage = JSON.parse(FtmlStorageItem);
