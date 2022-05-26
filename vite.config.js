@@ -1,6 +1,7 @@
 const { resolve, join } = require('path');
 const bundledWorker = require(resolve(__dirname, './plugins/vite-plugin-bundled-worker'));
 const crossPlatform = require(resolve(__dirname, './plugins/vite-plugin-cross-platform'));
+import fs from "vite-plugin-fs";
 /**
  * @type {import('vite').UserConfig}
  * @see https://vitejs.dev/config/
@@ -21,6 +22,7 @@ module.exports = {
   plugins: [
     bundledWorker(),
     crossPlatform("node"),
+    fs(),
   ],
   build: {
     target: 'es2020',
