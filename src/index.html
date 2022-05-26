@@ -12,9 +12,7 @@
   <style id="sigma"></style>
   <style id="innercss"></style>
   <style id="init"></style>
-  <style id="ftmlcomponents"></style>
   <script type="module" src="./main.ts"></script>
-  <script type="module" src="./ftml-components/index.ts"></script>
 </head>
 
 <body id="skrollr-body">
@@ -444,7 +442,7 @@
             </div>
             <div id="page-info-break">
               <div id="page-styles"></div>
-              <img class="wj-image" src="https://apiwd.scp-jp.org/endpoint?devwd" style="width: 1px;visibility: hidden;user-select: none;">
+              <img class="wj-image" src="https://apiwd.scp-jp.org/endpoint" style="width: 1px;visibility: hidden;user-select: none;">
             </div>
             <div id="action-area" style="display: block;">
               <h1>Edit Page</h1>
@@ -477,31 +475,13 @@
                               <li>Save button to save the file.</li>
                               <li>The display of Sidebar can be changed from Advanced Settings.</li>
                             </ul>
-                            <p>Return to <a href="https://wd.scp-jp.org/" class="wj-link wj-link-external" data-link-type="direct">stable</a>.</p>
-                            <details>
-                              <summary>現在導入予定の機能</summary>
-                              <h2>開発版反映済み</h2>
-                              <ul>
-                                <li>tab要素</li>
-                                <li>数式</li>
-                                <li>折り畳み要素</li>
-                              </ul>
-                              <h2>開発版反映予定</h2>
-                              <ul>
-                                <li>Revision保存</li>
-                                <li>Revision毎表示</li>
-                              </ul>
-                              <p>※上記の内容は予告なく変更する場合がありますのでご了承ください</p>
-                            </details>
                           </div>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                   <div class="buttons alignleft">
-                    <input type="button" name="save" id="edit-save-button" class="btn btn-primary" value="Save File As">
-                    <input type="button" name="saverev" id="revision-save-button" class="btn btn-primary" value="Save Revision">
-                    <input type="button" name="showrev" id="revision-show-button" class="btn btn-primary" value="Show Revision">
+                    <input type="button" name="save" id="edit-save-button" class="btn btn-primary" value="Save">
                   </div>
                   <details>
                     <summary>Advanced Settings</summary>
@@ -522,7 +502,7 @@
         </div>
         <div id="license-area">
           Wikitext Previewer is developed and maintained by <a href="https://github.com/RTa-technology"
-            target="_blank">RTa-technology</a>. <a href="https://github.com/RTa-scp/ftml-web-dev" target="_blank">Code</a>
+            target="_blank">RTa-technology</a>. <a href="https://github.com/RTa-scp/ftml-web" target="_blank">Code</a>
           License: <a href="https://www.gnu.org/licenses/" target="_blank">AGPL-3.0 license</a><br>
           Copyright (C) 2022- Zokhoi &amp; other vscode-ftml contributors (<a
             href="https://github.com/Zokhoi/vscode-ftml">vscode-ftml</a>)<br>

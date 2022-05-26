@@ -1,5 +1,5 @@
 # FTML/Wikidot Web Previewer
-![](https://img.shields.io/github/workflow/status/RTa-scp/ftml-web-dev/deploy?style=flat-square)  
+![](https://img.shields.io/github/workflow/status/RTa-scp/ftml-web/deploy?style=flat-square)  
 A WebApp to preview FTML, the SCP Foundation's markup language, on the Web.
 
 ## Development
@@ -20,9 +20,7 @@ pnpm run dev
 ## License
 Copyright (C) 2022- Zokhoi & other vscode-ftml contributors ([vscode-ftml](https://github.com/Zokhoi/vscode-ftml))
 
-Copyright (C) 2022- RTa-technology & other ftml-web contributors ([ftml-web](https://github.com/RTa-scp/ftml-web))
-
-Copyright (C) 2022- RTa-technology & other ftml-web-dev contributors
+Copyright (C) 2022- RTa-technology & other ftml-web contributors (see AUTHORS.md)
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
